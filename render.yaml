@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: smartnotes
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn smartnotes_project.wsgi:application
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        value: django-insecure-7at@m7rv2h+%eexdpuv$8)v$38k-=csr7)(s-5rj34lfa0vp_!
+      - key: CLOUDINARY_NAME
+        value: smartnotes
+      - key: CLOUDINARY_KEY
+        value: 844492941685827
+      - key: CLOUDINARY_SECRET
+        value: IrbiZIKeDGDlfMLQwTlASiONyXk
