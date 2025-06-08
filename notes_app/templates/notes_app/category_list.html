@@ -1,0 +1,27 @@
+{% extends 'notes_app/base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card p-4 shadow-sm {% if request.user.profile.dark_mode %}bg-dark text-white{% endif %}">
+    <h3 class="mb-3">📂 Manage Your Categories</h3>
+    
+    <form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="input-group">
+        <input type="text" name="new_category" class="form-control" placeholder="Enter a new category name" required>
+        <button class="btn btn-success" type="submit">➕ Add</button>
+      </div>
+    </form>
+
+    <ul class="list-group list-group-flush">
+      {% for cat in categories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center {% if request.user.profile.dark_mode %}bg-dark text-white border-secondary{% endif %}">
+          {{ cat.name }}
+          <a href="{% url 'delete_category' cat.id %}" class="btn btn-sm btn-outline-danger">🗑 Delete</a>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No categories found.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

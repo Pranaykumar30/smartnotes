@@ -1,0 +1,16 @@
+{% extends "notes_app/base.html" %}
+{% block content %}
+<div class="container mt-5" style="max-width: 650px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title mb-4 text-center">📝 Create New Note</h3>
+
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-success w-100 mt-3">➕ Add Note</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+
+{% if page_obj %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for note in page_obj %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              {% if note.is_pinned %}📌 {% endif %}
+              {{ note.title }}
+            </h5>
+            <div class="card-text">
+              {{ note.content|safe }}
+            </div>
+           
+            
+            {% if note.due_date %}
+              <p class="mb-1">
+                <span class="badge 
+                  {% if note.is_overdue %}bg-danger
+                  {% elif note.is_due_soon %}bg-warning text-dark
+                  {% else %}bg-secondary
+                  {% endif %}">
+                  📅 Due {{ note.due_date }}
+                  {% if note.is_overdue %}- Overdue
+                  {% elif note.is_due_soon %}- In {{ note.days_until_due }} day{{ note.days_until_due|pluralize }}
+                  {% endif %}
+                </span>
+              </p>
+            {% endif %}
+
+          </div>
+          
+
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <small class="text-muted">Updated: {{ note.updated_at|date:"M d, Y H:i" }}</small>
+            <form method="post" action="{% url 'toggle_pin' note.id %}" style="display: inline;">
+              {% csrf_token %}
+              {% if note.is_pinned %}
+                <button class="btn btn-sm btn-outline-warning">📌 Unpin</button>
+              {% else %}
+                <button class="btn btn-sm btn-outline-secondary">📍 Pin</button>
+              {% endif %}
+            </form>
+            <div>
+              <a href="{% url 'edit_note' note.pk %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+              <a href="{% url 'delete_note' note.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- 🔥 Unique Pagination Design -->
+  {% if page_obj.has_other_pages %}
+    <div class="text-center mt-4">
+      <nav aria-label="Pagination">
+        <div class="pagination-container d-inline-flex gap-2">
+          {% if page_obj.has_previous %}
+            <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if request.GET.category_id %}&category_id={{ request.GET.category_id }}{% endif %}" class="btn btn-outline-secondary">⏪ First</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if request.GET.category_id %}&category_id={{ request.GET.category_id }}{% endif %}" class="btn btn-outline-secondary">⬅ Prev</a>
+          {% endif %}
+
+          <span class="btn btn-primary disabled">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if request.GET.category_id %}&category_id={{ request.GET.category_id }}{% endif %}" class="btn btn-outline-secondary">Next ➡</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if request.GET.category_id %}&category_id={{ request.GET.category_id }}{% endif %}" class="btn btn-outline-secondary">Last ⏩</a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+  {% endif %}
+{% else %}
+  <div class="alert alert-info">No notes found.</div>
+{% endif %}
+
+<style>
+  .pagination-container .btn {
+    border-radius: 25px;
+    padding: 6px 14px;
+    font-weight: 500;
+  }
+</style>

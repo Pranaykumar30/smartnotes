@@ -1,0 +1,59 @@
+{% extends 'notes_app/base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width: 700px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">👤 Edit Profile</h3>
+
+      <form method="post" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+        <h5 class="mb-3">🧾 Personal Info</h5>
+        {{ user_form.as_p }}
+        <h5 class="mb-3">🖼 Profile Picture</h5>
+        <div class="mb-3 text-center">
+          <img
+            id="previewImage"
+            src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}https://res.cloudinary.com/dgvhgcmhc/image/upload/samples/cloudinary-icon{% endif %}"
+            class="rounded-circle"
+            width="32"
+            height="32"
+            style="object-fit: cover;"
+          >
+
+
+          <br>
+          {{ image_form.image }}
+        </div>
+
+        
+        <button name="update_info" class="btn btn-outline-primary w-100 mt-2">Update Info</button>
+      </form>
+
+      <hr>
+
+      <form method="post">
+        {% csrf_token %}
+        <h5 class="mb-3">🔐 Change Password</h5>
+        {{ password_form.as_p }}
+        <button name="change_password" class="btn btn-outline-warning w-100 mt-2">Change Password</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+<script>
+  const imgInput = document.getElementById("id_image");
+  const preview = document.getElementById("previewImage");
+
+  if (imgInput && preview) {
+    imgInput.addEventListener("change", function () {
+      const [file] = imgInput.files;
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+      }
+    });
+  }
+</script>

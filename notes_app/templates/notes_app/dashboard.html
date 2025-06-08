@@ -1,0 +1,77 @@
+{% extends "notes_app/base.html" %}
+{% block content %}
+  
+  <div class="container mt-5">
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-8">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Search notes...">
+          </div>
+          <div class="col-md-4">
+            <select id="categorySelect" class="form-select">
+              <option value="">All Categories</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <h2>Welcome, {{ request.user.username }} 👋</h2>
+
+    <div class="mb-4">
+      <div class="card shadow-sm p-3">
+        <h4 class="mb-3">📊 Quick Overview</h4>
+        <p><strong>Total Notes:</strong> {{ note_count }}</p>
+        <p><strong>Categories Used:</strong>
+          {% for cat in category_stats %}
+            <span class="badge bg-info text-dark me-1">{{ cat.name }} ({{ cat.total }})</span>
+          {% empty %}
+            <span class="text-muted">None yet</span>
+          {% endfor %}
+        </p>
+        <div class="card mt-4 shadow-sm summary-card">
+          <div class="card-body">
+            <h5 class="card-title">🗓 Due Date Summary</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>🔴 Overdue</span> <span id="overdueCount">0</span>
+                {% if days_overdue > 0 %}
+                  <small class="text-danger d-block">📅 Oldest: {{ days_overdue }} day{{ days_overdue|pluralize }} overdue</small>
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>🟡 Due Today</span> <span id="todayCount">0</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>🟢 Upcoming</span> <span id="upcomingCount">0</span>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+
+
+        <p><strong>Recently Updated:</strong>
+          <ul>
+            {% for n in recent_notes %}
+              <li>{{ n.title }} ({{ n.updated_at|date:"M d, H:i" }})</li>
+            {% endfor %}
+          </ul>
+        </p>
+      </div>
+    </div>
+
+
+    <div id="noteContainer" hx-target="this">
+      {% include 'notes_app/_note_list.html' %}
+    </div>
+
+
+  </div>
+{% endblock %}

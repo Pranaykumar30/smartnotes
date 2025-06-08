@@ -1,0 +1,22 @@
+{% extends 'notes_app/base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>🗓 Notes Due Today</h2>
+
+  {% if notes %}
+    {% for note in notes %}
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ note.title }}</h5>
+          <p class="card-text">{{ note.content|linebreaks }}</p>
+          {% if note.due_date %}
+            <p class="text-muted small">Due: {{ note.due_date }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info">No notes are due today.</div>
+  {% endif %}
+</div>
+{% endblock %}
