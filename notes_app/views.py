@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Note, Category
+from .models import Note, Category, Profile
 from .forms import NoteForm, UserRegisterForm, UserUpdateForm, ProfileImageForm
 from django.contrib import messages
 from django.db import models
@@ -167,6 +167,7 @@ def register(request):
 
 @login_required
 def profile_edit(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         if 'update_info' in request.POST:
             user_form = UserUpdateForm(request.POST, instance=request.user)
