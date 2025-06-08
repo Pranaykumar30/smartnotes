@@ -149,6 +149,8 @@ MESSAGE_TAGS = {
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'landing'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For testing
 DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'

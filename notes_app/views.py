@@ -19,9 +19,13 @@ from datetime import timedelta
 from django.db.models import Count
 from .models import Note
 from django.db.models import F, ExpressionWrapper, DurationField
+from django.core.paginator import Paginator
 # Create your views here.
 
-from django.core.paginator import Paginator
+def landing_page(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    return render(request, 'notes_app/landing.html')
 
 @login_required
 def dashboard(request):

@@ -1,0 +1,12 @@
+{% extends 'notes_app/base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h1 class="mb-3">👋 Welcome to SmartNotes</h1>
+  <p class="lead">Your intelligent, cloud-backed note-taking assistant.</p>
+
+  <div class="mt-4">
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-3">🚪 Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-success btn-lg">📝 Register</a>
+  </div>
+</div>
+{% endblock %}
